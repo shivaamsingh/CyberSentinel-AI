@@ -231,3 +231,8 @@ models/*.joblib
 node_modules/
 dist/
 build/
+
+data/raw/
+data/processed/
+
+*.csv
