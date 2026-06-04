@@ -4,24 +4,39 @@ import axios from "axios";
 function App() {
 
   const [result, setResult] = useState(null);
+  const [history, setHistory] = useState([]);
 
   const testPrediction = async () => {
 
-    const payload = {
-      features: Array(78).fill(0)
-    };
+    try {
 
-    const response = await axios.post(
-      "http://127.0.0.1:8000/predict",
-      payload
-    );
+      const payload = {
+        features: Array(78).fill(0)
+      };
 
-    setResult(response.data);
+      const response = await axios.post(
+        "http://127.0.0.1:8000/predict",
+        payload
+      );
+
+      setResult(response.data);
+
+      setHistory(prev => [
+        response.data,
+        ...prev.slice(0, 9)
+      ]);
+
+    } catch (error) {
+
+      console.error(error);
+
+    }
   };
 
   const getRiskColor = (risk) => {
 
     switch (risk) {
+
       case "LOW":
         return "text-green-500";
 
@@ -40,15 +55,44 @@ function App() {
   };
 
   return (
+
     <div className="min-h-screen bg-black text-white p-10">
 
-      <h1 className="text-4xl font-bold mb-2">
+      <h1 className="text-5xl font-bold mb-2">
         CyberSentinel-AI
       </h1>
+
+      <p className="text-green-400 mb-4">
+        Security Operations Dashboard
+      </p>
 
       <p className="text-gray-400 mb-8">
         AI-Powered Cyber Threat Intelligence Platform
       </p>
+
+      {/* System Status */}
+
+      <div className="bg-gray-900 p-6 rounded-xl mb-8 w-full max-w-md">
+
+        <h2 className="text-xl font-bold mb-4">
+          System Status
+        </h2>
+
+        <p className="text-green-400">
+          ● Backend Online
+        </p>
+
+        <p className="text-green-400">
+          ● XGBoost Loaded
+        </p>
+
+        <p className="text-green-400">
+          ● Isolation Forest Loaded
+        </p>
+
+      </div>
+
+      {/* Button */}
 
       <button
         onClick={testPrediction}
@@ -57,11 +101,14 @@ function App() {
         Run Threat Analysis
       </button>
 
+      {/* Result Cards */}
+
       {result && (
 
         <div className="grid grid-cols-2 gap-6 mt-10">
 
           <div className="bg-gray-900 p-6 rounded-xl">
+
             <h3 className="text-gray-400">
               Attack Type
             </h3>
@@ -69,9 +116,11 @@ function App() {
             <p className="text-2xl font-bold">
               {result.attack_type}
             </p>
+
           </div>
 
           <div className="bg-gray-900 p-6 rounded-xl">
+
             <h3 className="text-gray-400">
               Confidence
             </h3>
@@ -79,9 +128,11 @@ function App() {
             <p className="text-2xl font-bold">
               {(result.confidence * 100).toFixed(2)}%
             </p>
+
           </div>
 
           <div className="bg-gray-900 p-6 rounded-xl">
+
             <h3 className="text-gray-400">
               Anomaly
             </h3>
@@ -89,9 +140,11 @@ function App() {
             <p className="text-2xl font-bold">
               {String(result.anomaly)}
             </p>
+
           </div>
 
           <div className="bg-gray-900 p-6 rounded-xl">
+
             <h3 className="text-gray-400">
               Risk Level
             </h3>
@@ -103,6 +156,48 @@ function App() {
             >
               {result.risk_level}
             </p>
+
+          </div>
+
+        </div>
+
+      )}
+
+      {/* Threat History */}
+
+      {history.length > 0 && (
+
+        <div className="mt-10">
+
+          <h2 className="text-2xl font-bold mb-4">
+            Recent Threat Activity
+          </h2>
+
+          <div className="space-y-3">
+
+            {history.map((item, index) => (
+
+              <div
+                key={index}
+                className="bg-gray-900 p-4 rounded-lg flex justify-between"
+              >
+
+                <span>
+                  {item.attack_type}
+                </span>
+
+                <span
+                  className={getRiskColor(
+                    item.risk_level
+                  )}
+                >
+                  {item.risk_level}
+                </span>
+
+              </div>
+
+            ))}
+
           </div>
 
         </div>
@@ -110,6 +205,7 @@ function App() {
       )}
 
     </div>
+
   );
 }
 
