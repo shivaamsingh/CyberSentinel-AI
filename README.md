@@ -2,11 +2,26 @@
 
 AI-Powered Cyber Threat Intelligence and Intrusion Detection Platform
 
+---
+
 ## Overview
 
 CyberSentinel-AI is an advanced cybersecurity platform that combines Machine Learning, Anomaly Detection, Explainable AI (XAI), Threat Intelligence, and Interactive Security Dashboards to detect, classify, explain, and investigate cyber threats.
 
 Built using the CICIDS2017 dataset, the platform provides both supervised and unsupervised threat detection capabilities alongside real-world threat intelligence integration.
+
+---
+
+## Project Highlights
+
+* 99.93% Multi-Class Intrusion Detection Accuracy
+* Isolation Forest Anomaly Detection
+* SHAP Explainable AI Integration
+* AbuseIPDB Threat Intelligence Lookup
+* React Security Operations Dashboard
+* FastAPI Backend APIs
+* AI Security Copilot
+* Versioned Development Lifecycle (v0.1 → v1.0)
 
 ---
 
@@ -85,6 +100,31 @@ Example Response:
 
 ---
 
+### AI Security Copilot
+
+Provides natural language explanations for cybersecurity concepts and threats.
+
+Capabilities:
+
+* DDoS Attack Explanations
+* Port Scan Analysis
+* Brute Force Attack Explanations
+* Anomaly Investigation
+* Security Knowledge Assistance
+* Interactive Security Queries
+
+Example:
+
+```text
+User:
+What is DDoS?
+
+Copilot:
+A DDoS attack floods a target with malicious traffic, making services unavailable to legitimate users.
+```
+
+---
+
 ### Security Operations Dashboard
 
 Built using React and TailwindCSS.
@@ -95,6 +135,7 @@ Features:
 * Threat History Tracking
 * Threat Intelligence Lookup
 * Risk Visualization
+* AI Security Copilot
 * Interactive Dashboard Interface
 
 ---
@@ -117,6 +158,12 @@ POST /predict
 
 ```http
 GET /threat-intel/{ip}
+```
+
+#### AI Security Copilot
+
+```http
+GET /copilot?query=...
 ```
 
 ---
@@ -143,7 +190,7 @@ CyberSentinel-AI
 │   ├── 03_feature_importance.ipynb
 │   ├── 04_multiclass_attack_detection.ipynb
 │   ├── 05_anomaly_detection.ipynb
-│   ├── 06_autoencoder_anomaly.ipynb
+│   ├── 06_autoencoder_anomaly_detection.ipynb
 │   └── 07_model_explainability.ipynb
 │
 ├── src
@@ -167,6 +214,7 @@ CyberSentinel-AI
 * Python
 * Scikit-Learn
 * XGBoost
+* Isolation Forest
 * SHAP
 
 ### Backend
@@ -264,18 +312,22 @@ CyberSentinel-AI
 * Live Threat Intelligence Display
 * Improved User Experience
 
+### v1.0
+
+* AI Security Copilot
+* Natural Language Threat Explanations
+* Interactive Security Assistant
+* Cybersecurity Knowledge Responses
+
 ---
 
 ## Roadmap
 
-### v1.0 AI Security Copilot
+### v1.1
 
-Planned Features:
-
-* LLM-Powered Security Assistant
-* Natural Language Threat Investigation
+* Gemini/OpenAI Powered Security Copilot
+* Advanced Threat Investigation
 * Security Recommendations
-* Threat Explanation Engine
 * Incident Analysis Support
 
 ### Future Enhancements
