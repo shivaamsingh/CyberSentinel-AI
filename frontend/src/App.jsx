@@ -8,6 +8,7 @@ function App() {
   const [intel, setIntel] = useState(null);
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const testPrediction = async () => {
     try {
@@ -45,13 +46,19 @@ function App() {
 
   const askCopilot = async () => {
     try {
-      const response = await axios.get(
-        `http://127.0.0.1:8000/copilot?query=${question}`
+      setLoading(true);
+      const response = await axios.post(
+        "http://127.0.0.1:8000/copilot",
+        {
+          question: question,
+        }
       );
 
       setAnswer(response.data.answer);
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -225,13 +232,12 @@ function App() {
             <p>🚨 Risk Score: {intel.risk_score}</p>
 
             <p
-              className={`font-bold ${
-                intel.threat_level === "HIGH"
+              className={`font-bold ${intel.threat_level === "HIGH"
                   ? "text-red-500"
                   : intel.threat_level === "MEDIUM"
-                  ? "text-orange-500"
-                  : "text-green-500"
-              }`}
+                    ? "text-orange-500"
+                    : "text-green-500"
+                }`}
             >
               🚨 Threat Level: {intel.threat_level}
             </p>
@@ -258,7 +264,7 @@ function App() {
             onClick={askCopilot}
             className="bg-green-600 px-5 py-3 rounded-lg hover:bg-green-700"
           >
-            Ask
+            {loading ? "Thinking..." : "Ask"}
           </button>
         </div>
       </div>
