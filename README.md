@@ -6,9 +6,9 @@ AI-Powered Cyber Threat Intelligence and Intrusion Detection Platform
 
 ## Overview
 
-CyberSentinel-AI is an advanced cybersecurity platform that combines Machine Learning, Anomaly Detection, Explainable AI (XAI), Threat Intelligence, and Interactive Security Dashboards to detect, classify, explain, and investigate cyber threats.
+CyberSentinel-AI is an advanced cybersecurity platform that combines Machine Learning, Anomaly Detection, Explainable AI (XAI), Threat Intelligence, Interactive Security Dashboards, and Local Large Language Models (LLMs) to detect, classify, explain, and investigate cyber threats.
 
-Built using the CICIDS2017 dataset, the platform provides both supervised and unsupervised threat detection capabilities alongside real-world threat intelligence integration.
+Built using the CICIDS2017 dataset, the platform provides both supervised and unsupervised threat detection capabilities alongside real-world threat intelligence integration and AI-powered cybersecurity assistance.
 
 ---
 
@@ -20,8 +20,9 @@ Built using the CICIDS2017 dataset, the platform provides both supervised and un
 * AbuseIPDB Threat Intelligence Lookup
 * React Security Operations Dashboard
 * FastAPI Backend APIs
-* AI Security Copilot
-* Versioned Development Lifecycle (v0.1 → v1.0)
+* Local Llama 3 Security Copilot
+* Ollama Integration
+* Versioned Development Lifecycle (v0.1 → v1.1)
 
 ---
 
@@ -68,10 +69,6 @@ Capabilities:
 * Threat Attribution
 * Transparent Decision Making
 
-#### SHAP Summary Plot
-
-![SHAP Analysis](docs/shap_ddos_summary.png)
-
 ---
 
 ### Threat Intelligence Integration
@@ -102,25 +99,32 @@ Example Response:
 
 ### AI Security Copilot
 
-Provides natural language explanations for cybersecurity concepts and threats.
+Powered by Llama 3 running locally through Ollama.
 
 Capabilities:
 
-* DDoS Attack Explanations
-* Port Scan Analysis
-* Brute Force Attack Explanations
-* Anomaly Investigation
-* Security Knowledge Assistance
-* Interactive Security Queries
+* Threat Explanation
+* Security Recommendations
+* Vulnerability Education
+* Incident Investigation Support
+* Cybersecurity Question Answering
 
-Example:
+Example Questions:
+
+* What is ransomware?
+* Explain SQL Injection.
+* How can I prevent brute force attacks?
+* Explain Port Scanning.
+* What is a zero-day vulnerability?
+
+Example Response:
 
 ```text
 User:
-What is DDoS?
+What is ransomware?
 
 Copilot:
-A DDoS attack floods a target with malicious traffic, making services unavailable to legitimate users.
+Ransomware is a type of malicious software that encrypts a victim's files and demands payment for restoration access.
 ```
 
 ---
@@ -163,7 +167,15 @@ GET /threat-intel/{ip}
 #### AI Security Copilot
 
 ```http
-GET /copilot?query=...
+POST /copilot
+```
+
+Request:
+
+```json
+{
+  "question": "What is ransomware?"
+}
 ```
 
 ---
@@ -178,7 +190,6 @@ CyberSentinel-AI
 │   └── processed
 │
 ├── docs
-│   └── shap_ddos_summary.png
 │
 ├── frontend
 │
@@ -195,6 +206,10 @@ CyberSentinel-AI
 │
 ├── src
 │   ├── api
+│   │   ├── main.py
+│   │   ├── threat_intel.py
+│   │   └── copilot.py
+│   │
 │   ├── models
 │   ├── features
 │   └── utils
@@ -233,6 +248,11 @@ CyberSentinel-AI
 ### Threat Intelligence
 
 * AbuseIPDB API
+
+### Local AI
+
+* Ollama
+* Llama 3
 
 ### Visualization
 
@@ -314,21 +334,27 @@ CyberSentinel-AI
 
 ### v1.0
 
-* AI Security Copilot
+* Rule-Based AI Security Copilot
 * Natural Language Threat Explanations
 * Interactive Security Assistant
-* Cybersecurity Knowledge Responses
+
+### v1.1
+
+* Local LLM Integration using Ollama
+* Llama 3 Powered Security Copilot
+* Dynamic Cybersecurity Question Answering
+* AI Security Assistant
 
 ---
 
 ## Roadmap
 
-### v1.1
+### v1.2
 
-* Gemini/OpenAI Powered Security Copilot
-* Advanced Threat Investigation
-* Security Recommendations
-* Incident Analysis Support
+* Incident Report Generator
+* Threat Severity Assessment
+* Automated Mitigation Recommendations
+* PDF Report Export
 
 ### Future Enhancements
 
@@ -364,6 +390,18 @@ venv\Scripts\activate
 
 ```bash
 pip install -r requirements.txt
+```
+
+### Install Ollama
+
+Download and install Ollama:
+
+https://ollama.com
+
+Pull Llama 3:
+
+```bash
+ollama pull llama3
 ```
 
 ### Start Backend
