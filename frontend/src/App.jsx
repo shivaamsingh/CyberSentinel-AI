@@ -2,18 +2,15 @@ import { useState } from "react";
 import axios from "axios";
 
 function App() {
-
   const [result, setResult] = useState(null);
   const [history, setHistory] = useState([]);
   const [ip, setIp] = useState("");
   const [intel, setIntel] = useState(null);
 
   const testPrediction = async () => {
-
     try {
-
       const payload = {
-        features: Array(78).fill(0)
+        features: Array(78).fill(0),
       };
 
       const response = await axios.post(
@@ -23,60 +20,44 @@ function App() {
 
       setResult(response.data);
 
-      setHistory(prev => [
+      setHistory((prev) => [
         response.data,
-        ...prev.slice(0, 9)
+        ...prev.slice(0, 9),
       ]);
-
     } catch (error) {
-
       console.error(error);
-
     }
   };
 
   const lookupThreatIntel = async () => {
-
     try {
-
       const response = await axios.get(
         `http://127.0.0.1:8000/threat-intel/${ip}`
       );
 
       setIntel(response.data);
-
     } catch (error) {
-
       console.error(error);
-
     }
   };
 
   const getRiskColor = (risk) => {
-
     switch (risk) {
-
       case "LOW":
         return "text-green-500";
-
       case "MEDIUM":
         return "text-yellow-500";
-
       case "HIGH":
         return "text-orange-500";
-
       case "CRITICAL":
         return "text-red-500";
-
       default:
         return "text-white";
     }
   };
 
   return (
-
-    <div className="min-h-screen bg-black text-white p-10">
-
+    <div className="min-h-screen bg-black text-white p-10 max-w-7xl mx-auto">
       <h1 className="text-5xl font-bold mb-2">
         CyberSentinel-AI
       </h1>
@@ -92,7 +73,6 @@ function App() {
       {/* System Status */}
 
       <div className="bg-gray-900 p-6 rounded-xl mb-8 w-full max-w-md">
-
         <h2 className="text-xl font-bold mb-4">
           System Status
         </h2>
@@ -108,10 +88,9 @@ function App() {
         <p className="text-green-400">
           ● Isolation Forest Loaded
         </p>
-
       </div>
 
-      {/* Threat Analysis */}
+      {/* Threat Analysis Button */}
 
       <button
         onClick={testPrediction}
@@ -120,14 +99,11 @@ function App() {
         Run Threat Analysis
       </button>
 
-      {/* Result Cards */}
+      {/* Prediction Results */}
 
       {result && (
-
-        <div className="grid md:grid-cols-2 gap-6 mt-10">
-
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mt-10">
           <div className="bg-gray-900 p-6 rounded-xl">
-
             <h3 className="text-gray-400">
               Attack Type
             </h3>
@@ -135,11 +111,9 @@ function App() {
             <p className="text-2xl font-bold">
               {result.attack_type}
             </p>
-
           </div>
 
           <div className="bg-gray-900 p-6 rounded-xl">
-
             <h3 className="text-gray-400">
               Confidence
             </h3>
@@ -147,11 +121,9 @@ function App() {
             <p className="text-2xl font-bold">
               {(result.confidence * 100).toFixed(2)}%
             </p>
-
           </div>
 
           <div className="bg-gray-900 p-6 rounded-xl">
-
             <h3 className="text-gray-400">
               Anomaly
             </h3>
@@ -159,11 +131,9 @@ function App() {
             <p className="text-2xl font-bold">
               {String(result.anomaly)}
             </p>
-
           </div>
 
           <div className="bg-gray-900 p-6 rounded-xl">
-
             <h3 className="text-gray-400">
               Risk Level
             </h3>
@@ -175,64 +145,43 @@ function App() {
             >
               {result.risk_level}
             </p>
-
           </div>
-
         </div>
-
       )}
 
       {/* Threat History */}
 
       {history.length > 0 && (
-
         <div className="mt-10">
-
           <h2 className="text-2xl font-bold mb-4">
             Recent Threat Activity
           </h2>
 
           <div className="space-y-3">
-
             {history.map((item, index) => (
-
               <div
                 key={index}
                 className="bg-gray-900 p-4 rounded-lg flex justify-between"
               >
+                <span>{item.attack_type}</span>
 
-                <span>
-                  {item.attack_type}
-                </span>
-
-                <span
-                  className={getRiskColor(
-                    item.risk_level
-                  )}
-                >
+                <span className={getRiskColor(item.risk_level)}>
                   {item.risk_level}
                 </span>
-
               </div>
-
             ))}
-
           </div>
-
         </div>
-
       )}
 
-      {/* Threat Intelligence */}
+      {/* Threat Intel Lookup */}
 
       <div className="mt-10">
-
         <h2 className="text-2xl font-bold mb-4">
           Threat Intelligence Lookup
         </h2>
 
         <div className="flex gap-3 flex-wrap">
-
           <input
             type="text"
             value={ip}
@@ -247,35 +196,41 @@ function App() {
           >
             Lookup
           </button>
-
         </div>
-
       </div>
 
-      {/* Threat Intelligence Result */}
+      {/* Threat Intel Result */}
 
       {intel && (
-
-        <div className="bg-gray-900 p-6 rounded-xl mt-6 max-w-md">
-
-          <h3 className="text-xl font-bold mb-3">
+        <div className="bg-gray-900 p-6 rounded-xl mt-6 w-full max-w-3xl">
+          <h3 className="text-xl font-bold mb-4">
             Threat Intelligence Result
           </h3>
 
-          <p className="mb-2">
-            Risk Score: {intel.risk_score}
-          </p>
+          <div className="space-y-2">
+            <p>🌐 IP Address: {intel.ip}</p>
 
-          <p>
-            Status: {intel.status}
-          </p>
+            <p>🌍 Country: {intel.country}</p>
 
+            <p>📋 Reports: {intel.reports}</p>
+
+            <p>🚨 Risk Score: {intel.risk_score}</p>
+
+            <p
+              className={`font-bold ${
+                intel.threat_level === "HIGH"
+                  ? "text-red-500"
+                  : intel.threat_level === "MEDIUM"
+                  ? "text-orange-500"
+                  : "text-green-500"
+              }`}
+            >
+              🚨 Threat Level: {intel.threat_level}
+            </p>
+          </div>
         </div>
-
       )}
-
     </div>
-
   );
 }
 
