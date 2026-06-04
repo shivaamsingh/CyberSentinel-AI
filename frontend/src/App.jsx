@@ -105,7 +105,7 @@ function App() {
 
       {result && (
 
-        <div className="grid grid-cols-2 gap-6 mt-10">
+        <div className="grid md:grid-cols-2 gap-6 mt-10">
 
           <div className="bg-gray-900 p-6 rounded-xl">
 
