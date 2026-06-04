@@ -6,6 +6,8 @@ function App() {
   const [history, setHistory] = useState([]);
   const [ip, setIp] = useState("");
   const [intel, setIntel] = useState(null);
+  const [question, setQuestion] = useState("");
+  const [answer, setAnswer] = useState("");
 
   const testPrediction = async () => {
     try {
@@ -41,6 +43,18 @@ function App() {
     }
   };
 
+  const askCopilot = async () => {
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:8000/copilot?query=${question}`
+      );
+
+      setAnswer(response.data.answer);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const getRiskColor = (risk) => {
     switch (risk) {
       case "LOW":
@@ -71,7 +85,6 @@ function App() {
       </p>
 
       {/* System Status */}
-
       <div className="bg-gray-900 p-6 rounded-xl mb-8 w-full max-w-md">
         <h2 className="text-xl font-bold mb-4">
           System Status
@@ -91,7 +104,6 @@ function App() {
       </div>
 
       {/* Threat Analysis Button */}
-
       <button
         onClick={testPrediction}
         className="bg-blue-600 px-6 py-3 rounded-lg hover:bg-blue-700"
@@ -100,7 +112,6 @@ function App() {
       </button>
 
       {/* Prediction Results */}
-
       {result && (
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mt-10">
           <div className="bg-gray-900 p-6 rounded-xl">
@@ -150,7 +161,6 @@ function App() {
       )}
 
       {/* Threat History */}
-
       {history.length > 0 && (
         <div className="mt-10">
           <h2 className="text-2xl font-bold mb-4">
@@ -175,7 +185,6 @@ function App() {
       )}
 
       {/* Threat Intel Lookup */}
-
       <div className="mt-10">
         <h2 className="text-2xl font-bold mb-4">
           Threat Intelligence Lookup
@@ -200,7 +209,6 @@ function App() {
       </div>
 
       {/* Threat Intel Result */}
-
       {intel && (
         <div className="bg-gray-900 p-6 rounded-xl mt-6 w-full max-w-3xl">
           <h3 className="text-xl font-bold mb-4">
@@ -228,6 +236,41 @@ function App() {
               🚨 Threat Level: {intel.threat_level}
             </p>
           </div>
+        </div>
+      )}
+
+      {/* AI Security Copilot */}
+      <div className="mt-10">
+        <h2 className="text-2xl font-bold mb-4">
+          AI Security Copilot
+        </h2>
+
+        <div className="flex gap-3 flex-wrap">
+          <input
+            type="text"
+            value={question}
+            onChange={(e) => setQuestion(e.target.value)}
+            placeholder="Ask a security question..."
+            className="bg-gray-900 p-3 rounded-lg text-white w-96"
+          />
+
+          <button
+            onClick={askCopilot}
+            className="bg-green-600 px-5 py-3 rounded-lg hover:bg-green-700"
+          >
+            Ask
+          </button>
+        </div>
+      </div>
+
+      {/* Copilot Response */}
+      {answer && (
+        <div className="bg-gray-900 p-6 rounded-xl mt-6 w-full max-w-3xl">
+          <h3 className="text-xl font-bold mb-3">
+            Copilot Response
+          </h3>
+
+          <p>{answer}</p>
         </div>
       )}
     </div>
