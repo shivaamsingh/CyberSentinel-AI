@@ -4,13 +4,13 @@ AI-Powered Cyber Threat Intelligence and Intrusion Detection Platform
 
 ## Overview
 
-CyberSentinel-AI is an advanced cybersecurity platform that combines Machine Learning, Anomaly Detection, Threat Intelligence, and AI-powered analysis to detect, classify, and investigate cyber threats.
+CyberSentinel-AI is an advanced cybersecurity platform that combines Machine Learning, Anomaly Detection, Explainable AI (XAI), Threat Intelligence, and Interactive Security Dashboards to detect, classify, explain, and investigate cyber threats.
 
-The project is built using the CICIDS2017 dataset and currently supports both supervised and unsupervised threat detection techniques.
+Built using the CICIDS2017 dataset, the platform provides both supervised and unsupervised threat detection capabilities alongside real-world threat intelligence integration.
 
 ---
 
-## Current Capabilities
+## Features
 
 ### Multi-Class Intrusion Detection System (IDS)
 
@@ -36,15 +36,88 @@ Identifies suspicious network behavior that deviates from normal traffic pattern
 
 **Model:** Isolation Forest
 
-**Attack Recall:** 78%
-
 **Accuracy:** 67.9%
+
+**Attack Recall:** 78%
 
 ---
 
-### FastAPI Backend
+### Explainable AI (SHAP)
 
-Provides a foundation for serving machine learning models through REST APIs.
+The platform uses SHAP (SHapley Additive exPlanations) to understand and explain model predictions.
+
+Capabilities:
+
+* Feature Importance Analysis
+* Model Interpretability
+* Threat Attribution
+* Transparent Decision Making
+
+#### SHAP Summary Plot
+
+![SHAP Analysis](docs/shap_ddos_summary.png)
+
+---
+
+### Threat Intelligence Integration
+
+Integrated with AbuseIPDB for real-world IP reputation analysis.
+
+Capabilities:
+
+* IP Reputation Lookup
+* Abuse Confidence Score
+* Country Information
+* Report Statistics
+* Threat Level Assessment
+
+Example Response:
+
+```json
+{
+  "ip": "8.8.8.8",
+  "risk_score": 0,
+  "country": "US",
+  "reports": 117,
+  "threat_level": "LOW"
+}
+```
+
+---
+
+### Security Operations Dashboard
+
+Built using React and TailwindCSS.
+
+Features:
+
+* Real-Time Threat Analysis
+* Threat History Tracking
+* Threat Intelligence Lookup
+* Risk Visualization
+* Interactive Dashboard Interface
+
+---
+
+### REST APIs
+
+#### Health Check
+
+```http
+GET /health
+```
+
+#### Threat Prediction
+
+```http
+POST /predict
+```
+
+#### Threat Intelligence Lookup
+
+```http
+GET /threat-intel/{ip}
+```
 
 ---
 
@@ -54,53 +127,81 @@ Provides a foundation for serving machine learning models through REST APIs.
 CyberSentinel-AI
 │
 ├── data
+│   ├── raw
+│   └── processed
+│
 ├── docs
-├── models
-├── notebooks
-├── src
-│   └── api
+│   └── shap_ddos_summary.png
+│
 ├── frontend
-└── tests
+│
+├── models
+│
+├── notebooks
+│   ├── 01_data_exploration.ipynb
+│   ├── 02_binary_ddos_detection.ipynb
+│   ├── 03_feature_importance.ipynb
+│   ├── 04_multiclass_attack_detection.ipynb
+│   ├── 05_anomaly_detection.ipynb
+│   ├── 06_autoencoder_anomaly.ipynb
+│   └── 07_model_explainability.ipynb
+│
+├── src
+│   ├── api
+│   ├── models
+│   ├── features
+│   └── utils
+│
+├── tests
+│
+├── requirements.txt
+└── README.md
 ```
 
 ---
 
-## Tech Stack
+## Technology Stack
 
 ### Machine Learning
 
 * Python
 * Scikit-Learn
 * XGBoost
-* TensorFlow
+* SHAP
 
 ### Backend
 
 * FastAPI
 * Uvicorn
+* Pydantic
 
-### Frontend (Planned)
+### Frontend
 
 * React
 * TailwindCSS
+* Axios
+* Vite
 
-### Databases (Planned)
+### Threat Intelligence
 
-* PostgreSQL
-* ChromaDB
-* Neo4j
+* AbuseIPDB API
 
-### AI & Threat Intelligence (Planned)
+### Visualization
 
-* Transformers
-* RAG
-* LLM Agents
+* Matplotlib
+* SHAP
+
+### Development Tools
+
+* Git
+* GitHub
+* VS Code
 
 ---
 
 ## Results
 
-### Multi-Class Classification
+### Multi-Class Attack Classification
 
 | Metric   | Value      |
 | -------- | ---------- |
@@ -117,7 +218,7 @@ CyberSentinel-AI
 
 ---
 
-## Roadmap
+## Version History
 
 ### v0.1
 
@@ -144,24 +245,99 @@ CyberSentinel-AI
 
 ### v0.6
 
-* Explainable AI (SHAP)
+* Threat History Dashboard
+* System Status Monitoring
 
 ### v0.7
 
-* Threat Intelligence Retrieval System
+* Explainable AI using SHAP
 
-### v1.0
+### v0.8
 
-* AI Security Copilot
-* Incident Report Generation
-* RAG-Based Cyber Knowledge Base
+* Threat Intelligence Integration
+* AbuseIPDB Lookup
+* Threat Level Assessment
+
+### v0.9
+
+* Enhanced Security Operations Dashboard
+* Live Threat Intelligence Display
+* Improved User Experience
+
+---
+
+## Roadmap
+
+### v1.0 AI Security Copilot
+
+Planned Features:
+
+* LLM-Powered Security Assistant
+* Natural Language Threat Investigation
+* Security Recommendations
+* Threat Explanation Engine
+* Incident Analysis Support
+
+### Future Enhancements
+
+* RAG-Based Cybersecurity Knowledge Base
+* SOC Analyst Assistant
+* Malware Analysis Agent
+* Threat Hunting Module
+* SIEM Integration
+* Real-Time Packet Monitoring
+* Cloud Deployment
+
+---
+
+## Installation
+
+### Clone Repository
+
+```bash
+git clone https://github.com/shivaamsingh/CyberSentinel-AI.git
+
+cd CyberSentinel-AI
+```
+
+### Create Virtual Environment
+
+```bash
+python -m venv venv
+
+venv\Scripts\activate
+```
+
+### Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### Start Backend
+
+```bash
+python -m uvicorn src.api.main:app --reload
+```
+
+### Start Frontend
+
+```bash
+cd frontend
+
+npm install
+
+npm run dev
+```
 
 ---
 
 ## Author
 
-Shivam Singh
+**Shivam Singh**
 
 B.Tech CSE (AI/ML)
 
-Cybersecurity & Artificial Intelligence Enthusiast
+Cybersecurity • Artificial Intelligence • Machine Learning
+
+GitHub: https://github.com/shivaamsingh
