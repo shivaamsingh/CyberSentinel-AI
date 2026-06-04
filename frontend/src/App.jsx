@@ -5,6 +5,8 @@ function App() {
 
   const [result, setResult] = useState(null);
   const [history, setHistory] = useState([]);
+  const [ip, setIp] = useState("");
+  const [intel, setIntel] = useState(null);
 
   const testPrediction = async () => {
 
@@ -25,6 +27,23 @@ function App() {
         response.data,
         ...prev.slice(0, 9)
       ]);
+
+    } catch (error) {
+
+      console.error(error);
+
+    }
+  };
+
+  const lookupThreatIntel = async () => {
+
+    try {
+
+      const response = await axios.get(
+        `http://127.0.0.1:8000/threat-intel/${ip}`
+      );
+
+      setIntel(response.data);
 
     } catch (error) {
 
@@ -92,7 +111,7 @@ function App() {
 
       </div>
 
-      {/* Button */}
+      {/* Threat Analysis */}
 
       <button
         onClick={testPrediction}
@@ -199,6 +218,57 @@ function App() {
             ))}
 
           </div>
+
+        </div>
+
+      )}
+
+      {/* Threat Intelligence */}
+
+      <div className="mt-10">
+
+        <h2 className="text-2xl font-bold mb-4">
+          Threat Intelligence Lookup
+        </h2>
+
+        <div className="flex gap-3 flex-wrap">
+
+          <input
+            type="text"
+            value={ip}
+            onChange={(e) => setIp(e.target.value)}
+            placeholder="Enter IP Address"
+            className="bg-gray-900 p-3 rounded-lg text-white w-80"
+          />
+
+          <button
+            onClick={lookupThreatIntel}
+            className="bg-purple-600 px-5 py-3 rounded-lg hover:bg-purple-700"
+          >
+            Lookup
+          </button>
+
+        </div>
+
+      </div>
+
+      {/* Threat Intelligence Result */}
+
+      {intel && (
+
+        <div className="bg-gray-900 p-6 rounded-xl mt-6 max-w-md">
+
+          <h3 className="text-xl font-bold mb-3">
+            Threat Intelligence Result
+          </h3>
+
+          <p className="mb-2">
+            Risk Score: {intel.risk_score}
+          </p>
+
+          <p>
+            Status: {intel.status}
+          </p>
 
         </div>
 

@@ -1,14 +1,19 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
+from src.api.threat_intel import router as threat_router
 
 from pathlib import Path
 import joblib
 import numpy as np
 
+
 app = FastAPI(
     title="CyberSentinel-AI",
-    version="0.4"
+    version="0.8"
+)
+app.include_router(
+    threat_router
 )
 
 app.add_middleware(
