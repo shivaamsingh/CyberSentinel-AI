@@ -11,7 +11,7 @@ import numpy as np
 
 app = FastAPI(
     title="CyberSentinel-AI",
-    version="0.8"
+    version="1.1"
 )
 app.include_router(
     threat_router
