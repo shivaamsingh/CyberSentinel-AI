@@ -1,0 +1,12 @@
+SQL Injection is a web application attack that allows attackers
+to manipulate SQL queries by injecting malicious input.
+
+Impacts:
+- Data theft
+- Authentication bypass
+- Database manipulation
+
+Mitigations:
+- Parameterized queries
+- Prepared statements
+- Input validation

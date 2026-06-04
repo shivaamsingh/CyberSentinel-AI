@@ -1,0 +1,13 @@
+Port Scanning is a reconnaissance technique used by attackers to send packets to specific ports on a host to discover active services, open ports, and operating system vulnerabilities.
+
+Impacts:
+- Exposure of active network services
+- System architecture mapping by malicious actors
+- Identification of unpatched software entry points
+- Increased risk of targeted exploitation
+
+Mitigations:
+- Configuring firewalls to block unauthorized inbound scanning
+- Disabling unused network ports and services
+- Implementing Intrusion Prevention Systems (IPS) to detect and drop port scan traffic
+- Utilizing port knocking techniques for sensitive administrative services

@@ -1,0 +1,12 @@
+Distributed Denial of Service (DDoS) attacks attempt to overwhelm
+a target system using large volumes of traffic.
+
+Impacts:
+- Service disruption
+- Downtime
+- Resource exhaustion
+
+Mitigations:
+- Rate limiting
+- CDN protection
+- Traffic filtering

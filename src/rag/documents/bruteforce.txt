@@ -1,0 +1,13 @@
+Brute Force attacks involve systematically trying every possible combination of passwords, passphrases, or encryption keys until the correct one is found.
+
+Impacts:
+- Unauthorized account access
+- Data breaches
+- Account lockouts and denial of service
+- Server performance degradation due to high login traffic
+
+Mitigations:
+- Account lockout policies after multiple failed attempts
+- Strong multi-factor authentication (MFA)
+- Implementing CAPTCHAs on login interfaces
+- Rate limiting login requests by IP address
