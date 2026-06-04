@@ -2,10 +2,11 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 from src.api.threat_intel import router as threat_router
-
+from src.api.copilot import router as copilot_router
 from pathlib import Path
 import joblib
 import numpy as np
+
 
 
 app = FastAPI(
@@ -15,7 +16,9 @@ app = FastAPI(
 app.include_router(
     threat_router
 )
-
+app.include_router(
+    copilot_router
+)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
