@@ -6,18 +6,25 @@ from src.api.copilot import router as copilot_router
 from pathlib import Path
 import joblib
 import numpy as np
-
+from src.api.report_generator import router as report_router
+from src.api.rag_chat import router as rag_router
 
 
 app = FastAPI(
     title="CyberSentinel-AI",
-    version="1.1"
+    version="1.3"
 )
 app.include_router(
     threat_router
 )
 app.include_router(
     copilot_router
+)
+app.include_router(
+    report_router
+)
+app.include_router(
+    rag_router
 )
 app.add_middleware(
     CORSMiddleware,

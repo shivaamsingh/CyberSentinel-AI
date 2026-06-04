@@ -8,9 +8,37 @@ function App() {
   const [intel, setIntel] = useState(null);
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [report, setReport] = useState("");
+  const [generating, setGenerating] = useState(false);
+
+  const generateReport = async () => {
+    try {
+      setGenerating(true);
+
+      const response = await axios.post(
+        "http://127.0.0.1:8000/generate-report",
+        {
+          attack_type: result?.attack_type || "Unknown",
+          risk_level: result?.risk_level || "LOW",
+          threat_score: intel?.risk_score || 0,
+          ip: intel?.ip || "N/A",
+        }
+      );
+
+      setReport(response.data.report);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setGenerating(false);
+    }
+  };
 
   const testPrediction = async () => {
     try {
+      // Clear old report when starting a new threat analysis prediction
+      setReport("");
+
       const payload = {
         features: Array(78).fill(0),
       };
@@ -45,13 +73,19 @@ function App() {
 
   const askCopilot = async () => {
     try {
-      const response = await axios.get(
-        `http://127.0.0.1:8000/copilot?query=${question}`
+      setLoading(true);
+      const response = await axios.post(
+        "http://127.0.0.1:8000/copilot",
+        {
+          question: question,
+        }
       );
 
       setAnswer(response.data.answer);
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -103,13 +137,23 @@ function App() {
         </p>
       </div>
 
-      {/* Threat Analysis Button */}
-      <button
-        onClick={testPrediction}
-        className="bg-blue-600 px-6 py-3 rounded-lg hover:bg-blue-700"
-      >
-        Run Threat Analysis
-      </button>
+      {/* Threat Analysis Controls */}
+      <div className="flex items-center">
+        <button
+          onClick={testPrediction}
+          className="bg-blue-600 px-6 py-3 rounded-lg hover:bg-blue-700"
+        >
+          Run Threat Analysis
+        </button>
+
+        <button
+          onClick={generateReport}
+          disabled={!result || generating}
+          className="bg-red-600 px-6 py-3 rounded-lg hover:bg-red-700 ml-4 disabled:opacity-50"
+        >
+          {generating ? "Generating..." : "Generate Incident Report"}
+        </button>
+      </div>
 
       {/* Prediction Results */}
       {result && (
@@ -157,6 +201,19 @@ function App() {
               {result.risk_level}
             </p>
           </div>
+        </div>
+      )}
+
+      {/* Incident Report Output */}
+      {report && (
+        <div className="bg-gray-900 p-6 rounded-xl mt-8">
+          <h2 className="text-2xl font-bold mb-4 text-red-400">
+            AI Generated Incident Report
+          </h2>
+
+          <pre className="whitespace-pre-wrap text-gray-300">
+            {report}
+          </pre>
         </div>
       )}
 
@@ -225,13 +282,12 @@ function App() {
             <p>🚨 Risk Score: {intel.risk_score}</p>
 
             <p
-              className={`font-bold ${
-                intel.threat_level === "HIGH"
-                  ? "text-red-500"
-                  : intel.threat_level === "MEDIUM"
+              className={`font-bold ${intel.threat_level === "HIGH"
+                ? "text-red-500"
+                : intel.threat_level === "MEDIUM"
                   ? "text-orange-500"
                   : "text-green-500"
-              }`}
+                }`}
             >
               🚨 Threat Level: {intel.threat_level}
             </p>
@@ -240,7 +296,7 @@ function App() {
       )}
 
       {/* AI Security Copilot */}
-      <div className="mt-10">
+      <div className="mt-10 mb-20">
         <h2 className="text-2xl font-bold mb-4">
           AI Security Copilot
         </h2>
@@ -250,29 +306,25 @@ function App() {
             type="text"
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
-            placeholder="Ask a security question..."
-            className="bg-gray-900 p-3 rounded-lg text-white w-96"
+            placeholder="Ask the copilot about this threat..."
+            className="bg-gray-900 p-3 rounded-lg text-white w-full max-w-xl"
           />
 
           <button
             onClick={askCopilot}
-            className="bg-green-600 px-5 py-3 rounded-lg hover:bg-green-700"
+            disabled={loading}
+            className="bg-green-600 px-5 py-3 rounded-lg hover:bg-green-700 disabled:opacity-50"
           >
-            Ask
+            {loading ? "Thinking..." : "Ask"}
           </button>
         </div>
+
+        {answer && (
+          <div className="bg-gray-900 p-6 rounded-xl mt-6 w-full max-w-3xl">
+            <p className="text-gray-300 whitespace-pre-wrap">{answer}</p>
+          </div>
+        )}
       </div>
-
-      {/* Copilot Response */}
-      {answer && (
-        <div className="bg-gray-900 p-6 rounded-xl mt-6 w-full max-w-3xl">
-          <h3 className="text-xl font-bold mb-3">
-            Copilot Response
-          </h3>
-
-          <p>{answer}</p>
-        </div>
-      )}
     </div>
   );
 }
