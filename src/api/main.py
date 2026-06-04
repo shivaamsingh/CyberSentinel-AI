@@ -1,9 +1,132 @@
 from fastapi import FastAPI
+from pydantic import BaseModel
 
-app = FastAPI()
+from pathlib import Path
+import joblib
+import numpy as np
+
+app = FastAPI(
+    title="CyberSentinel-AI",
+    version="0.4"
+)
+
+
+# Load Models
+
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+
+MODELS_DIR = BASE_DIR / "models"
+
+multiclass_model = joblib.load(
+    MODELS_DIR / "multiclass_xgb_v1.pkl"
+)
+
+attack_encoder = joblib.load(
+    MODELS_DIR / "attack_encoder.pkl"
+)
+
+iso_model = joblib.load(
+    MODELS_DIR / "isolation_forest_v1.pkl"
+)
+
+scaler = joblib.load(
+    MODELS_DIR / "anomaly_scaler.pkl"
+)
+
+
+# Input Schema
+
+class TrafficData(BaseModel):
+    features: list[float]
+
+
+# Route
+
 
 @app.get("/")
 def home():
     return {
         "message": "CyberSentinel-AI Running"
     }
+
+@app.get("/health")
+def health():
+    return {
+        "status": "healthy"
+    }
+    
+@app.post("/predict")
+def predict(data: TrafficData):
+
+    features = np.array(
+        data.features
+    ).reshape(1, -1)
+
+    # Anomaly Detection
+    
+
+    scaled_features = scaler.transform(
+        features
+    )
+
+    anomaly_pred = iso_model.predict(
+        scaled_features
+    )[0]
+
+    anomaly = (
+        True
+        if anomaly_pred == -1
+        else False
+    )
+
+    
+    # Attack Detection
+
+
+    attack_pred = multiclass_model.predict(
+    features
+    )[0]
+
+    probs = multiclass_model.predict_proba(
+    features
+    )[0]
+
+    confidence = float(
+    np.max(probs)
+    )
+
+    attack_type = attack_encoder.inverse_transform(
+        [attack_pred]
+    )[0]
+
+    
+    # Risk Score
+    
+
+    risk = "LOW"
+
+    if attack_type in [
+    "PortScan",
+    "BruteForce"
+    ]:
+        risk = "MEDIUM"
+
+    if attack_type in [
+    "DDoS",
+    "DoS",
+    "Bot",
+    "WebAttack"
+    ]:
+     risk = "HIGH"
+
+    if anomaly:
+        risk = "CRITICAL"
+    return {
+    "attack_type": attack_type,
+    "confidence": round(
+        confidence,
+        4
+    ),
+    "anomaly": anomaly,
+    "risk_level": risk
+}
