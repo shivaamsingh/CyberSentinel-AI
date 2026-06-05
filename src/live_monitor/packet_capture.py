@@ -1,7 +1,7 @@
 from scapy.all import sniff
 from flow_tracker import update_flow
 from live_detector import detect
-
+from ml_detector import predict
 
 def process_packet(packet):
 
@@ -18,7 +18,11 @@ def process_packet(packet):
 )
 
     alert = detect(flow)
+    ml_result = predict(flow)
 
+    print(
+    f"ML:{ml_result}"
+    )
     if alert != "BENIGN":
         print(f"[ALERT] {alert}")
 
