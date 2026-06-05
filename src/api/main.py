@@ -15,15 +15,17 @@ from src.api.rag_chat import router as rag_router
 from src.api.investigator import router as investigator_router
 from src.api.analyst_assistant import router as analyst_router
 from src.api.explain import router as explain_router
-
+from src.api.live_monitor import (
+    router as live_router
+)
 from datetime import datetime
 from src.api.alerts import (
     router as alerts_router,
     alerts
-    
-    
-    
 )
+
+
+    
 app = FastAPI(
     title="CyberSentinel-AI",
     version="1.5"
@@ -51,6 +53,9 @@ app.include_router(
 )
 app.include_router(
     alerts_router
+)
+app.include_router(
+    live_router
 )
 app.add_middleware(
     CORSMiddleware,
