@@ -22,56 +22,41 @@ function App() {
   const [explanation, setExplanation] = useState([]);
   const [explaining, setExplaining] = useState(false);
   const [alerts, setAlerts] = useState([]);
+  const [liveAlerts, setLiveAlerts] = useState([]);
 
   const [selectedAttack, setSelectedAttack] = useState("BENIGN");
 
-  useEffect(() => {
-  const fetchAlerts = async () => {
+  const loadLiveAlerts = async () => {
     try {
-      const response = await axios.get(
-        "http://127.0.0.1:8000/alerts"
-      );
-
-      setAlerts(response.data);
-    } catch (error) {
-      console.error(error);
+      const res = await axios.get("http://127.0.0.1:8000/live-alerts");
+      setLiveAlerts(res.data);
+    } catch (err) {
+      console.error(err);
     }
   };
 
-  fetchAlerts();
-}, []);
+  useEffect(() => {
+    loadLiveAlerts();
+    const interval = setInterval(loadLiveAlerts, 3000);
+    return () => clearInterval(interval);
+  }, []);
 
   const loadAlerts = async () => {
     try {
-      const response = await axios.get(
-        "http://127.0.0.1:8000/alerts"
-      );
-
+      const response = await axios.get("http://127.0.0.1:8000/alerts");
       setAlerts(response.data);
-
     } catch (error) {
       console.error(error);
     }
   };
-
-
-
 
   const explainPrediction = async () => {
     try {
       setExplaining(true);
-
-      const response = await axios.post(
-        "http://127.0.0.1:8000/explain",
-        {
-          features: samples[selectedAttack]
-        }
-      );
-
-      setExplanation(
-        response.data.top_features
-      );
-
+      const response = await axios.post("http://127.0.0.1:8000/explain", {
+        features: samples[selectedAttack],
+      });
+      setExplanation(response.data.top_features);
     } catch (error) {
       console.error(error);
     } finally {
@@ -79,19 +64,20 @@ function App() {
     }
   };
 
-const clearOutputs = () => {
-  setResult(null);
-  setReport("");
-  setInvestigation("");
-  setMitreTactic("");
-  setMitreTechnique("");
-  setAnalysis("");
-  setAnalysisData(null);
-  setAnswer("");
-  setQuestion("");
-  setIp("");
-  setExplanation([]);
-};
+  const clearOutputs = () => {
+    setResult(null);
+    setReport("");
+    setInvestigation("");
+    setMitreTactic("");
+    setMitreTechnique("");
+    setAnalysis("");
+    setAnalysisData(null);
+    setAnswer("");
+    setQuestion("");
+    setIp("");
+    setExplanation([]);
+  };
+
   const runSample = async (attack) => {
     try {
       clearOutputs();
@@ -226,7 +212,7 @@ const clearOutputs = () => {
         <p className="text-green-400">● Isolation Forest Loaded</p>
       </div>
 
-      {/* ✅ Threat Simulation – Dropdown + Button */}
+      {/* Threat Simulation – Dropdown + Button */}
       <div className="bg-gray-900 p-6 rounded-xl mt-8">
         <h2 className="text-2xl font-bold mb-4">
           Attack Simulation Lab
@@ -268,7 +254,6 @@ const clearOutputs = () => {
 
       {/* Threat Analysis Controls */}
       <div className="flex items-center flex-wrap gap-2 mt-8">
-
         <button
           onClick={generateReport}
           disabled={!result || !intel || generating}
@@ -300,7 +285,6 @@ const clearOutputs = () => {
         >
           {explaining ? "Explaining..." : "Explain Prediction"}
         </button>
-
       </div>
 
       {/* Loading indicator for SOC Analysis */}
@@ -397,19 +381,24 @@ const clearOutputs = () => {
           <h2 className="text-2xl font-bold mb-4 text-purple-400">
             Explainable AI Analysis
           </h2>
-
           <p className="text-gray-400 mb-4">
             Top features influencing the prediction
           </p>
-
           <div className="space-y-3">
             {explanation.map((item, index) => (
               <div
                 key={index}
                 className="flex justify-between bg-black p-3 rounded-lg"
               >
-                <span>{index + 1}. {item.feature}</span>
+                <div className="flex justify-between w-full">
+                  <span>
+                    {index + 1}. {item.feature}
+                  </span>
 
+                  <span className="text-purple-400 font-bold">
+                    {Number(item.importance).toFixed(4)}
+                  </span>
+                </div>
                 <span className="text-purple-400 font-bold">
                   {item.importance}
                 </span>
@@ -419,22 +408,19 @@ const clearOutputs = () => {
         </div>
       )}
 
+      {/* Live SOC Alert Feed (from /alerts) */}
       {alerts.length > 0 && (
         <div className="bg-gray-900 p-6 rounded-xl mt-8">
           <h2 className="text-2xl font-bold mb-4 text-red-400">
             Live SOC Alert Feed
           </h2>
-
           <div className="space-y-3">
             {alerts.map((alert, index) => (
               <div
                 key={index}
                 className="bg-black p-3 rounded-lg flex justify-between"
               >
-                <span>
-                  {alert.attack_type}
-                </span>
-
+                <span>{alert.attack_type}</span>
                 <span
                   className={
                     alert.risk_level === "CRITICAL"
@@ -448,23 +434,34 @@ const clearOutputs = () => {
                 >
                   {alert.risk_level}
                 </span>
-
-                <span className="text-gray-400">
-                  {alert.timestamp}
-                </span>
+                <p className="text-gray-400">{alert.timestamp}</p>
               </div>
             ))}
           </div>
         </div>
       )}
+
+      {/* New Live ML Alerts Card (from /live-alerts) */}
+      <div className="bg-gray-900 p-6 rounded-xl mt-8">
+        <h2 className="text-xl font-bold mb-4">Live ML Alerts</h2>
+        {liveAlerts.length === 0 ? (
+          <p>No alerts</p>
+        ) : (
+          liveAlerts.map((alert, idx) => (
+            <div key={idx} className="border-b border-gray-700 py-2">
+              <p>🚨 {alert.alert}</p>
+              <p>PPS: {alert.pps.toFixed(2)}</p>
+              <p>BPS: {alert.bps.toFixed(2)}</p>
+            </div>
+          ))
+        )}
+      </div>
+
       {/* Threat History */}
       {history.length > 0 && (
         <div className="mt-10">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl font-bold">
-              Recent Threat Activity
-            </h2>
-
+            <h2 className="text-2xl font-bold">Recent Threat Activity</h2>
             <button
               onClick={() => setHistory([])}
               className="bg-gray-700 px-3 py-2 rounded-lg hover:bg-gray-600"
