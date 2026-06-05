@@ -8,6 +8,7 @@ import joblib
 import numpy as np
 from src.api.report_generator import router as report_router
 from src.api.rag_chat import router as rag_router
+from src.api.investigator import router as investigator_router
 
 
 app = FastAPI(
@@ -25,6 +26,9 @@ app.include_router(
 )
 app.include_router(
     rag_router
+)
+app.include_router(
+    investigator_router
 )
 app.add_middleware(
     CORSMiddleware,

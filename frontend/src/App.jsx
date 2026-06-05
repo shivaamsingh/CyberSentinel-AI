@@ -11,6 +11,38 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [report, setReport] = useState("");
   const [generating, setGenerating] = useState(false);
+  const [investigation, setInvestigation] = useState("");
+  const [investigating, setInvestigating] = useState(false);
+  const [mitreTactic, setMitreTactic] = useState("");
+  const [mitreTechnique, setMitreTechnique] = useState("");
+
+
+  const investigateThreat = async () => {
+    try {
+      setInvestigating(true);
+
+      const response = await axios.post(
+        "http://127.0.0.1:8000/investigate",
+        {
+          attack_type: result?.attack_type || "BENIGN",
+          risk_level: result?.risk_level || "LOW",
+          ip: intel?.ip || "N/A"
+        }
+      );
+
+      setMitreTactic(response.data.mitre_tactic);
+      setMitreTechnique(response.data.mitre_technique);
+      setInvestigation(response.data.investigation);
+
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setInvestigating(false);
+    }
+  };
+
+
+
 
   const generateReport = async () => {
     try {
@@ -36,8 +68,10 @@ function App() {
 
   const testPrediction = async () => {
     try {
-      // Clear old report when starting a new threat analysis prediction
       setReport("");
+      setInvestigation("");
+      setMitreTactic("");
+      setMitreTechnique("");
 
       const payload = {
         features: Array(78).fill(0),
@@ -153,6 +187,18 @@ function App() {
         >
           {generating ? "Generating..." : "Generate Incident Report"}
         </button>
+        <button
+          onClick={investigateThreat}
+          disabled={
+            !result ||
+            investigating
+          }
+          className="bg-orange-600 px-6 py-3 rounded-lg hover:bg-orange-700 ml-4 disabled:opacity-50"
+        >
+          {investigating
+            ? "Investigating..."
+            : "Investigate Threat"}
+        </button>
       </div>
 
       {/* Prediction Results */}
@@ -213,6 +259,33 @@ function App() {
 
           <pre className="whitespace-pre-wrap text-gray-300">
             {report}
+          </pre>
+        </div>
+      )}
+
+
+
+      {/* Investigation Output */}
+      {investigation && (
+        <div className="bg-gray-900 p-6 rounded-xl mt-8">
+          <h2 className="text-2xl font-bold mb-4 text-orange-400">
+            AI Threat Investigation
+          </h2>
+
+          <div className="mb-4">
+            <p>
+              <strong>MITRE Tactic:</strong>{" "}
+              {mitreTactic}
+            </p>
+
+            <p>
+              <strong>MITRE Technique:</strong>{" "}
+              {mitreTechnique}
+            </p>
+          </div>
+
+          <pre className="whitespace-pre-wrap text-gray-300">
+            {investigation}
           </pre>
         </div>
       )}
