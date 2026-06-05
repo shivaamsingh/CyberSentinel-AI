@@ -10,7 +10,9 @@ flows = defaultdict(
         "start_time": time.time(),
         "last_seen": time.time(),
         "pps": 0,
-        "bps": 0
+        "bps": 0,
+        "avg_pkt_size": 0,
+        "duration": 0
     }
 )
 
@@ -36,12 +38,18 @@ def update_flow(packet):
 
     flows[key]["packets"] += 1
     flows[key]["bytes"] += len(packet)
+    flows[key]["avg_packet_size"] = (
+    flows[key]["bytes"]
+    / flows[key]["packets"]
+    )
     flows[key]["last_seen"] = time.time()
     
-    duration = (
-    flows[key]["last_seen"]
-    - flows[key]["start_time"]
-)
+    flows[key]["duration"] = (
+        flows[key]["last_seen"]
+        - flows[key]["start_time"]
+    )
+
+    duration = flows[key]["duration"]
 
     if duration <= 0.001:
         duration = 0.001

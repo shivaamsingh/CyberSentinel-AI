@@ -11,11 +11,11 @@ def process_packet(packet):
         return
 
     print(
-        f"PPS={flow['pps']:.2f} | "
-        f"BPS={flow['bps']:.2f} | "
-        f"Packets={flow['packets']} | "
-        f"Bytes={flow['bytes']}"
-    )
+    f"PPS={flow['pps']:.2f} | "
+    f"BPS={flow['bps']:.2f} | "
+    f"Duration={flow['duration']:.2f}s | "
+    f"AvgPkt={flow['avg_packet_size']:.2f}"
+)
 
     alert = detect(flow)
 
