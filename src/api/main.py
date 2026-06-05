@@ -13,7 +13,7 @@ from src.api.investigator import router as investigator_router
 
 app = FastAPI(
     title="CyberSentinel-AI",
-    version="1.3"
+    version="1.4"
 )
 app.include_router(
     threat_router

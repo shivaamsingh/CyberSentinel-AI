@@ -1,14 +1,14 @@
 # CyberSentinel-AI
 
-AI-Powered Cyber Threat Intelligence and Intrusion Detection Platform
+AI-Powered Cyber Threat Intelligence, Intrusion Detection, and SOC Investigation Platform
 
 ---
 
 ## Overview
 
-CyberSentinel-AI is an advanced cybersecurity platform that combines Machine Learning, Anomaly Detection, Explainable AI (XAI), Threat Intelligence, Interactive Security Dashboards, and Local Large Language Models (LLMs) to detect, classify, explain, and investigate cyber threats.
+CyberSentinel-AI is an advanced cybersecurity platform that combines Machine Learning, Explainable AI (XAI), Threat Intelligence, Retrieval-Augmented Generation (RAG), MITRE ATT&CK Mapping, and Local Large Language Models (LLMs) to detect, explain, investigate, and report cyber threats.
 
-Built using the CICIDS2017 dataset, the platform provides both supervised and unsupervised threat detection capabilities alongside real-world threat intelligence integration and AI-powered cybersecurity assistance.
+Built using the CICIDS2017 dataset, the platform provides both supervised and unsupervised threat detection capabilities alongside AI-powered SOC analyst workflows.
 
 ---
 
@@ -16,21 +16,23 @@ Built using the CICIDS2017 dataset, the platform provides both supervised and un
 
 * 99.93% Multi-Class Intrusion Detection Accuracy
 * Isolation Forest Anomaly Detection
-* SHAP Explainable AI Integration
-* AbuseIPDB Threat Intelligence Lookup
+* SHAP Explainable AI
+* AbuseIPDB Threat Intelligence Integration
+* Local Llama 3 Security Copilot
+* AI Incident Report Generator
+* Cybersecurity RAG Knowledge Base
+* MITRE ATT&CK Mapping
+* AI Threat Investigation Engine
 * React Security Operations Dashboard
 * FastAPI Backend APIs
-* Local Llama 3 Security Copilot
-* Ollama Integration
-* Versioned Development Lifecycle (v0.1 → v1.1)
 
 ---
 
-## Features
+## Core Features
 
-### Multi-Class Intrusion Detection System (IDS)
+### Intrusion Detection System (IDS)
 
-Detects and classifies:
+Detects:
 
 * BENIGN
 * DDoS
@@ -40,185 +42,188 @@ Detects and classifies:
 * Bot
 * WebAttack
 
-**Model:** XGBoost
+Model:
 
-**Accuracy:** 99.93%
+* XGBoost
+
+Accuracy:
+
+* 99.93%
 
 ---
 
-### Anomaly Detection Engine
+### Anomaly Detection
 
-Identifies suspicious network behavior that deviates from normal traffic patterns.
+Model:
 
-**Model:** Isolation Forest
+* Isolation Forest
 
-**Accuracy:** 67.9%
+Capabilities:
 
-**Attack Recall:** 78%
+* Unknown threat detection
+* Outlier detection
+* Suspicious traffic identification
 
 ---
 
 ### Explainable AI (SHAP)
 
-The platform uses SHAP (SHapley Additive exPlanations) to understand and explain model predictions.
-
 Capabilities:
 
 * Feature Importance Analysis
-* Model Interpretability
+* Model Explainability
 * Threat Attribution
-* Transparent Decision Making
+* Transparent Predictions
 
 ---
 
 ### Threat Intelligence Integration
 
-Integrated with AbuseIPDB for real-world IP reputation analysis.
+Powered by AbuseIPDB.
 
 Capabilities:
 
 * IP Reputation Lookup
-* Abuse Confidence Score
+* Risk Scoring
 * Country Information
 * Report Statistics
-* Threat Level Assessment
+* Threat Level Classification
 
-Example Response:
+Endpoint:
 
-```json
-{
-  "ip": "8.8.8.8",
-  "risk_score": 0,
-  "country": "US",
-  "reports": 117,
-  "threat_level": "LOW"
-}
-```
+GET /threat-intel/{ip}
 
 ---
 
 ### AI Security Copilot
 
-Powered by Llama 3 running locally through Ollama.
+Powered by:
+
+* Ollama
+* Llama 3
 
 Capabilities:
 
-* Threat Explanation
+* Cybersecurity Question Answering
+* Attack Explanations
 * Security Recommendations
 * Vulnerability Education
-* Incident Investigation Support
-* Cybersecurity Question Answering
 
-Example Questions:
+Endpoint:
 
-* What is ransomware?
-* Explain SQL Injection.
-* How can I prevent brute force attacks?
-* Explain Port Scanning.
-* What is a zero-day vulnerability?
+POST /copilot
 
-Example Response:
+---
 
-```text
-User:
-What is ransomware?
+### AI Incident Report Generator
 
-Copilot:
-Ransomware is a type of malicious software that encrypts a victim's files and demands payment for restoration access.
-```
+Automatically creates SOC-style incident reports.
+
+Capabilities:
+
+* Executive Summary
+* Threat Assessment
+* Potential Impact Analysis
+* Recommended Actions
+* Professional Incident Documentation
+
+Endpoint:
+
+POST /generate-report
+
+---
+
+### Cybersecurity RAG Knowledge Base
+
+Retrieval-Augmented Generation system built using:
+
+* ChromaDB
+* HuggingFace Embeddings
+* LangChain
+
+Knowledge Base Topics:
+
+* SQL Injection
+* Port Scanning
+* Brute Force
+* DDoS
+
+Capabilities:
+
+* Context-Aware Cybersecurity Answers
+* Knowledge Retrieval
+* Threat Explanation
+
+Endpoint:
+
+POST /rag-chat
+
+---
+
+### AI Threat Investigation Engine
+
+Combines:
+
+* MITRE ATT&CK Mapping
+* Llama 3 Analysis
+* RAG Context
+
+Capabilities:
+
+* Executive Summary
+* Likely Attacker Goal
+* Impact Analysis
+* MITRE ATT&CK Mapping
+* Recommended Actions
+
+Supported MITRE Techniques:
+
+| Attack Type | Technique |
+| ----------- | --------- |
+| PortScan    | T1046     |
+| BruteForce  | T1110     |
+| DDoS        | T1498     |
+| Bot         | T1071     |
+| WebAttack   | T1190     |
+
+Endpoint:
+
+POST /investigate
 
 ---
 
 ### Security Operations Dashboard
 
-Built using React and TailwindCSS.
+Built using:
 
-Features:
+* React
+* TailwindCSS
+* Axios
+* Vite
 
-* Real-Time Threat Analysis
-* Threat History Tracking
+Dashboard Features:
+
+* Threat Analysis
+* Threat History
 * Threat Intelligence Lookup
-* Risk Visualization
+* Incident Reports
+* Threat Investigation
 * AI Security Copilot
-* Interactive Dashboard Interface
+* MITRE Mapping Visualization
 
 ---
 
-### REST APIs
+## API Endpoints
 
-#### Health Check
-
-```http
-GET /health
-```
-
-#### Threat Prediction
-
-```http
-POST /predict
-```
-
-#### Threat Intelligence Lookup
-
-```http
-GET /threat-intel/{ip}
-```
-
-#### AI Security Copilot
-
-```http
-POST /copilot
-```
-
-Request:
-
-```json
-{
-  "question": "What is ransomware?"
-}
-```
-
----
-
-## Project Structure
-
-```text
-CyberSentinel-AI
-│
-├── data
-│   ├── raw
-│   └── processed
-│
-├── docs
-│
-├── frontend
-│
-├── models
-│
-├── notebooks
-│   ├── 01_data_exploration.ipynb
-│   ├── 02_binary_ddos_detection.ipynb
-│   ├── 03_feature_importance.ipynb
-│   ├── 04_multiclass_attack_detection.ipynb
-│   ├── 05_anomaly_detection.ipynb
-│   ├── 06_autoencoder_anomaly_detection.ipynb
-│   └── 07_model_explainability.ipynb
-│
-├── src
-│   ├── api
-│   │   ├── main.py
-│   │   ├── threat_intel.py
-│   │   └── copilot.py
-│   │
-│   ├── models
-│   ├── features
-│   └── utils
-│
-├── tests
-│
-├── requirements.txt
-└── README.md
-```
+| Method | Endpoint           | Description                |
+| ------ | ------------------ | -------------------------- |
+| GET    | /health            | Health Check               |
+| POST   | /predict           | Threat Prediction          |
+| GET    | /threat-intel/{ip} | Threat Intelligence        |
+| POST   | /copilot           | AI Security Copilot        |
+| POST   | /generate-report   | Incident Report Generation |
+| POST   | /rag-chat          | Cybersecurity RAG Chat     |
+| POST   | /investigate       | AI Threat Investigation    |
 
 ---
 
@@ -247,19 +252,17 @@ CyberSentinel-AI
 
 ### Threat Intelligence
 
-* AbuseIPDB API
+* AbuseIPDB
 
-### Local AI
+### AI
 
 * Ollama
 * Llama 3
+* LangChain
+* ChromaDB
+* HuggingFace Embeddings
 
-### Visualization
-
-* Matplotlib
-* SHAP
-
-### Development Tools
+### Development
 
 * Git
 * GitHub
@@ -267,168 +270,60 @@ CyberSentinel-AI
 
 ---
 
-## Results
-
-### Multi-Class Attack Classification
-
-| Metric   | Value      |
-| -------- | ---------- |
-| Accuracy | 99.93%     |
-| Classes  | 7          |
-| Dataset  | CICIDS2017 |
-
-### Anomaly Detection
-
-| Metric        | Value |
-| ------------- | ----- |
-| Accuracy      | 67.9% |
-| Attack Recall | 78%   |
-
----
-
 ## Version History
-
-### v0.1
-
-* Binary DDoS Detection
-* FastAPI Setup
-
-### v0.2
-
-* Multi-Class Attack Classification
-* Feature Importance Analysis
-
-### v0.3
-
-* Isolation Forest Anomaly Detection
-
-### v0.4
-
-* Production Prediction API
-* Model Integration
-
-### v0.5
-
-* React Security Dashboard
-
-### v0.6
-
-* Threat History Dashboard
-* System Status Monitoring
-
-### v0.7
-
-* Explainable AI using SHAP
-
-### v0.8
-
-* Threat Intelligence Integration
-* AbuseIPDB Lookup
-* Threat Level Assessment
-
-### v0.9
-
-* Enhanced Security Operations Dashboard
-* Live Threat Intelligence Display
-* Improved User Experience
 
 ### v1.0
 
-* Rule-Based AI Security Copilot
-* Natural Language Threat Explanations
-* Interactive Security Assistant
+* AI Security Copilot
 
 ### v1.1
 
-* Local LLM Integration using Ollama
-* Llama 3 Powered Security Copilot
-* Dynamic Cybersecurity Question Answering
-* AI Security Assistant
+* Local Llama 3 Integration
+
+### v1.2
+
+* AI Incident Report Generator
+
+### v1.3
+
+* Cybersecurity RAG Knowledge Base
+
+### v1.4
+
+* AI Threat Investigation Engine
+* MITRE ATT&CK Mapping
+* RAG-Powered Investigation
+* SOC Analyst Workflow
 
 ---
 
 ## Roadmap
 
-### v1.2
+### v1.5
 
-* AI Incident Report Generator
-* SOC Style Report Creation
-* Threat Impact Assessment
-* Mitigation Recommendations
-* Dashboard Report Integration
-
-### Future Enhancements
-
-* RAG-Based Cybersecurity Knowledge Base
 * SOC Analyst Assistant
+* Unified Threat Analysis Pipeline
+* Automated Threat Intelligence Correlation
+* Combined Investigation + Report Generation
+
+### Future
+
 * Malware Analysis Agent
 * Threat Hunting Module
 * SIEM Integration
+* Docker Deployment
 * Real-Time Packet Monitoring
 * Cloud Deployment
 
 ---
 
-## Installation
-
-### Clone Repository
-
-```bash
-git clone https://github.com/shivaamsingh/CyberSentinel-AI.git
-
-cd CyberSentinel-AI
-```
-
-### Create Virtual Environment
-
-```bash
-python -m venv venv
-
-venv\Scripts\activate
-```
-
-### Install Dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
-### Install Ollama
-
-Download and install Ollama:
-
-https://ollama.com
-
-Pull Llama 3:
-
-```bash
-ollama pull llama3
-```
-
-### Start Backend
-
-```bash
-python -m uvicorn src.api.main:app --reload
-```
-
-### Start Frontend
-
-```bash
-cd frontend
-
-npm install
-
-npm run dev
-```
-
----
-
 ## Author
 
-**Shivam Singh**
+Shivam Singh
 
 B.Tech CSE (AI/ML)
 
 Cybersecurity • Artificial Intelligence • Machine Learning
 
-GitHub: https://github.com/shivaamsingh
+GitHub:
+https://github.com/shivaamsingh
