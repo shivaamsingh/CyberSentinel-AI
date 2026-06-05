@@ -1,6 +1,6 @@
-import { useState } from "react";
 import axios from "axios";
 import samples from "./samples.json";
+import { useState, useEffect } from "react";
 
 function App() {
   const [result, setResult] = useState(null);
@@ -21,8 +21,41 @@ function App() {
   const [analysisData, setAnalysisData] = useState(null);
   const [explanation, setExplanation] = useState([]);
   const [explaining, setExplaining] = useState(false);
+  const [alerts, setAlerts] = useState([]);
 
   const [selectedAttack, setSelectedAttack] = useState("BENIGN");
+
+  useEffect(() => {
+  const fetchAlerts = async () => {
+    try {
+      const response = await axios.get(
+        "http://127.0.0.1:8000/alerts"
+      );
+
+      setAlerts(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  fetchAlerts();
+}, []);
+
+  const loadAlerts = async () => {
+    try {
+      const response = await axios.get(
+        "http://127.0.0.1:8000/alerts"
+      );
+
+      setAlerts(response.data);
+
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+
+
 
   const explainPrediction = async () => {
     try {
@@ -46,20 +79,19 @@ function App() {
     }
   };
 
-  const clearOutputs = () => {
-    setResult(null);
-    setReport("");
-    setInvestigation("");
-    setMitreTactic("");
-    setMitreTechnique("");
-    setAnalysis("");
-    setAnalysisData(null);
-    setAnswer("");
-    setQuestion("");
-    setIp("");
-    setExplanation([]);
-  };
-
+const clearOutputs = () => {
+  setResult(null);
+  setReport("");
+  setInvestigation("");
+  setMitreTactic("");
+  setMitreTechnique("");
+  setAnalysis("");
+  setAnalysisData(null);
+  setAnswer("");
+  setQuestion("");
+  setIp("");
+  setExplanation([]);
+};
   const runSample = async (attack) => {
     try {
       clearOutputs();
@@ -68,6 +100,7 @@ function App() {
         features: samples[attack],
       });
       setResult(response.data);
+      await loadAlerts();
       setHistory((prev) => [response.data, ...prev.slice(0, 9)]);
     } catch (error) {
       console.error(error);
@@ -386,6 +419,44 @@ function App() {
         </div>
       )}
 
+      {alerts.length > 0 && (
+        <div className="bg-gray-900 p-6 rounded-xl mt-8">
+          <h2 className="text-2xl font-bold mb-4 text-red-400">
+            Live SOC Alert Feed
+          </h2>
+
+          <div className="space-y-3">
+            {alerts.map((alert, index) => (
+              <div
+                key={index}
+                className="bg-black p-3 rounded-lg flex justify-between"
+              >
+                <span>
+                  {alert.attack_type}
+                </span>
+
+                <span
+                  className={
+                    alert.risk_level === "CRITICAL"
+                      ? "text-red-500"
+                      : alert.risk_level === "HIGH"
+                        ? "text-orange-500"
+                        : alert.risk_level === "MEDIUM"
+                          ? "text-yellow-500"
+                          : "text-green-500"
+                  }
+                >
+                  {alert.risk_level}
+                </span>
+
+                <span className="text-gray-400">
+                  {alert.timestamp}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
       {/* Threat History */}
       {history.length > 0 && (
         <div className="mt-10">

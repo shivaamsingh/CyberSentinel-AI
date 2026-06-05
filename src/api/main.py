@@ -1,17 +1,29 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
+
 from fastapi.middleware.cors import CORSMiddleware
 from src.api.threat_intel import router as threat_router
 from src.api.copilot import router as copilot_router
 from pathlib import Path
+
 import joblib
 import numpy as np
+
 from src.api.report_generator import router as report_router
 from src.api.rag_chat import router as rag_router
+
 from src.api.investigator import router as investigator_router
 from src.api.analyst_assistant import router as analyst_router
 from src.api.explain import router as explain_router
 
+from datetime import datetime
+from src.api.alerts import (
+    router as alerts_router,
+    alerts
+    
+    
+    
+)
 app = FastAPI(
     title="CyberSentinel-AI",
     version="1.5"
@@ -36,6 +48,9 @@ app.include_router(
 )
 app.include_router(
     explain_router
+)
+app.include_router(
+    alerts_router
 )
 app.add_middleware(
     CORSMiddleware,
@@ -98,7 +113,6 @@ def predict(data: TrafficData):
     ).reshape(1, -1)
 
     # Anomaly Detection
-    
 
     scaled_features = scaler.transform(
         features
@@ -114,54 +128,67 @@ def predict(data: TrafficData):
         else False
     )
 
-    
     # Attack Detection
 
-
     attack_pred = multiclass_model.predict(
-    features
+        features
     )[0]
 
     probs = multiclass_model.predict_proba(
-    features
+        features
     )[0]
 
     confidence = float(
-    np.max(probs)
+        np.max(probs)
     )
 
     attack_type = attack_encoder.inverse_transform(
         [attack_pred]
     )[0]
 
-    
     # Risk Score
-    
 
     risk = "LOW"
 
     if attack_type in [
-    "PortScan",
-    "BruteForce"
+        "PortScan",
+        "BruteForce"
     ]:
         risk = "MEDIUM"
 
     if attack_type in [
-    "DDoS",
-    "DoS",
-    "Bot",
-    "WebAttack"
+        "DDoS",
+        "DoS",
+        "Bot",
+        "WebAttack"
     ]:
-     risk = "HIGH"
+        risk = "HIGH"
 
     if anomaly:
         risk = "CRITICAL"
+
+    # SOC Alert Feed
+
+    alerts.insert(
+        0,
+        {
+            "attack_type": attack_type,
+            "risk_level": risk,
+            "timestamp": datetime.now().strftime(
+                "%H:%M:%S"
+            )
+        }
+    )
+
+    if len(alerts) > 50:
+        alerts.pop()
+
     return {
-    "attack_type": attack_type,
-    "confidence": round(
-        confidence,
-        4
-    ),
-    "anomaly": anomaly,
-    "risk_level": risk
-}
+        "attack_type": attack_type,
+        "confidence": round(
+            confidence,
+            4
+        ),
+        "anomaly": anomaly,
+        "risk_level": risk
+    }
