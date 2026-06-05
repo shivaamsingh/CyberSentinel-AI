@@ -19,10 +19,32 @@ function App() {
   const [analysis, setAnalysis] = useState("");
   const [analyzing, setAnalyzing] = useState(false);
   const [analysisData, setAnalysisData] = useState(null);
-
+  const [explanation, setExplanation] = useState([]);
+  const [explaining, setExplaining] = useState(false);
 
   const [selectedAttack, setSelectedAttack] = useState("BENIGN");
 
+  const explainPrediction = async () => {
+    try {
+      setExplaining(true);
+
+      const response = await axios.post(
+        "http://127.0.0.1:8000/explain",
+        {
+          features: samples[selectedAttack]
+        }
+      );
+
+      setExplanation(
+        response.data.top_features
+      );
+
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setExplaining(false);
+    }
+  };
 
   const clearOutputs = () => {
     setResult(null);
@@ -33,7 +55,9 @@ function App() {
     setAnalysis("");
     setAnalysisData(null);
     setAnswer("");
+    setQuestion("");
     setIp("");
+    setExplanation([]);
   };
 
   const runSample = async (attack) => {
@@ -236,6 +260,14 @@ function App() {
           {analyzing ? "Analyzing..." : "Analyze Threat"}
         </button>
 
+        <button
+          onClick={explainPrediction}
+          disabled={!result || explaining}
+          className="bg-purple-600 px-6 py-3 rounded-lg hover:bg-purple-700 disabled:opacity-50"
+        >
+          {explaining ? "Explaining..." : "Explain Prediction"}
+        </button>
+
       </div>
 
       {/* Loading indicator for SOC Analysis */}
@@ -323,6 +355,34 @@ function App() {
             </div>
           )}
           <pre className="whitespace-pre-wrap text-gray-300">{analysis}</pre>
+        </div>
+      )}
+
+      {/* SHAP / Explainable AI Panel */}
+      {explanation.length > 0 && (
+        <div className="bg-gray-900 p-6 rounded-xl mt-8">
+          <h2 className="text-2xl font-bold mb-4 text-purple-400">
+            Explainable AI Analysis
+          </h2>
+
+          <p className="text-gray-400 mb-4">
+            Top features influencing the prediction
+          </p>
+
+          <div className="space-y-3">
+            {explanation.map((item, index) => (
+              <div
+                key={index}
+                className="flex justify-between bg-black p-3 rounded-lg"
+              >
+                <span>{index + 1}. {item.feature}</span>
+
+                <span className="text-purple-400 font-bold">
+                  {item.importance}
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
       )}
 

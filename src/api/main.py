@@ -10,7 +10,7 @@ from src.api.report_generator import router as report_router
 from src.api.rag_chat import router as rag_router
 from src.api.investigator import router as investigator_router
 from src.api.analyst_assistant import router as analyst_router
-
+from src.api.explain import router as explain_router
 
 app = FastAPI(
     title="CyberSentinel-AI",
@@ -33,6 +33,9 @@ app.include_router(
 )
 app.include_router(
     analyst_router
+)
+app.include_router(
+    explain_router
 )
 app.add_middleware(
     CORSMiddleware,
