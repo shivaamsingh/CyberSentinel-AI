@@ -1,30 +1,75 @@
 # CyberSentinel-AI
 
-AI-Powered Cyber Threat Intelligence, Intrusion Detection, and SOC Investigation Platform
+AI-Powered Cyber Threat Intelligence, Intrusion Detection, SOC Investigation, and Security Operations Platform
 
 ---
 
 ## Overview
 
-CyberSentinel-AI is an advanced cybersecurity platform that combines Machine Learning, Explainable AI (XAI), Threat Intelligence, Retrieval-Augmented Generation (RAG), MITRE ATT&CK Mapping, and Local Large Language Models (LLMs) to detect, explain, investigate, and report cyber threats.
+CyberSentinel-AI is a full-stack cybersecurity platform that combines Machine Learning, Explainable AI (XAI), Threat Intelligence, Retrieval-Augmented Generation (RAG), MITRE ATT&CK Mapping, Live Network Monitoring, and Large Language Models (LLMs) to detect, explain, investigate, and respond to cyber threats.
 
-Built using the CICIDS2017 dataset, the platform provides both supervised and unsupervised threat detection capabilities alongside AI-powered SOC analyst workflows.
+Built using the CICIDS2017 dataset, CyberSentinel-AI provides both supervised and unsupervised threat detection alongside AI-powered SOC analyst workflows and real-time traffic monitoring.
 
 ---
 
-## Project Highlights
+## Key Highlights
 
 * 99.93% Multi-Class Intrusion Detection Accuracy
+* XGBoost Attack Detection Engine
 * Isolation Forest Anomaly Detection
 * SHAP Explainable AI
 * AbuseIPDB Threat Intelligence Integration
 * Local Llama 3 Security Copilot
-* AI Incident Report Generator
+* AI Incident Report Generation
 * Cybersecurity RAG Knowledge Base
 * MITRE ATT&CK Mapping
-* AI Threat Investigation Engine
-* React Security Operations Dashboard
-* FastAPI Backend APIs
+* SOC Analyst Assistant
+* Live Packet Monitoring
+* Live ML-Based Anomaly Detection
+* Real-Time SOC Alert Feed
+* Dockerized AI Stack
+* Ollama + Llama 3 Integration
+* FastAPI + React Architecture
+
+---
+
+## Architecture
+
+Frontend (React + TailwindCSS)
+
+↓
+
+FastAPI Backend
+
+↓
+
+Machine Learning Layer
+
+* XGBoost IDS
+* Isolation Forest
+
+↓
+
+AI Layer
+
+* Ollama
+* Llama 3
+* LangChain
+* ChromaDB
+
+↓
+
+Threat Intelligence Layer
+
+* AbuseIPDB
+
+↓
+
+Live Monitoring Layer
+
+* Scapy Packet Capture
+* Flow Statistics Engine
+* Real-Time Detection
 
 ---
 
@@ -35,10 +80,10 @@ Built using the CICIDS2017 dataset, the platform provides both supervised and un
 Detects:
 
 * BENIGN
-* DDoS
-* DoS
 * PortScan
 * BruteForce
+* DDoS
+* DoS
 * Bot
 * WebAttack
 
@@ -46,9 +91,9 @@ Model:
 
 * XGBoost
 
-Accuracy:
+Performance:
 
-* 99.93%
+* 99.93% Accuracy
 
 ---
 
@@ -60,34 +105,41 @@ Model:
 
 Capabilities:
 
-* Unknown threat detection
-* Outlier detection
-* Suspicious traffic identification
+* Unknown Threat Detection
+* Outlier Detection
+* Suspicious Traffic Analysis
+* Live Anomaly Monitoring
 
 ---
 
-### Explainable AI (SHAP)
+### Explainable AI
+
+Powered by:
+
+* SHAP
 
 Capabilities:
 
 * Feature Importance Analysis
-* Model Explainability
+* Prediction Explainability
 * Threat Attribution
-* Transparent Predictions
+* Model Transparency
 
 ---
 
-### Threat Intelligence Integration
+### Threat Intelligence
 
-Powered by AbuseIPDB.
+Powered by:
+
+* AbuseIPDB
 
 Capabilities:
 
 * IP Reputation Lookup
-* Risk Scoring
+* Threat Scoring
 * Country Information
 * Report Statistics
-* Threat Level Classification
+* Threat Classification
 
 Endpoint:
 
@@ -104,10 +156,10 @@ Powered by:
 
 Capabilities:
 
-* Cybersecurity Question Answering
-* Attack Explanations
+* Cybersecurity Q&A
 * Security Recommendations
-* Vulnerability Education
+* Attack Explanations
+* Security Awareness Training
 
 Endpoint:
 
@@ -117,15 +169,13 @@ POST /copilot
 
 ### AI Incident Report Generator
 
-Automatically creates SOC-style incident reports.
-
 Capabilities:
 
 * Executive Summary
 * Threat Assessment
 * Potential Impact Analysis
 * Recommended Actions
-* Professional Incident Documentation
+* SOC-Style Reporting
 
 Endpoint:
 
@@ -133,26 +183,21 @@ POST /generate-report
 
 ---
 
-### Cybersecurity RAG Knowledge Base
+### Cybersecurity RAG System
 
-Retrieval-Augmented Generation system built using:
+Built Using:
 
+* LangChain
 * ChromaDB
 * HuggingFace Embeddings
-* LangChain
 
 Knowledge Base Topics:
 
 * SQL Injection
+* DDoS
 * Port Scanning
 * Brute Force
-* DDoS
-
-Capabilities:
-
-* Context-Aware Cybersecurity Answers
-* Knowledge Retrieval
-* Threat Explanation
+* Web Attacks
 
 Endpoint:
 
@@ -162,29 +207,13 @@ POST /rag-chat
 
 ### AI Threat Investigation Engine
 
-Combines:
-
-* MITRE ATT&CK Mapping
-* Llama 3 Analysis
-* RAG Context
-
 Capabilities:
 
-* Executive Summary
-* Likely Attacker Goal
-* Impact Analysis
 * MITRE ATT&CK Mapping
-* Recommended Actions
-
-Supported MITRE Techniques:
-
-| Attack Type | Technique |
-| ----------- | --------- |
-| PortScan    | T1046     |
-| BruteForce  | T1110     |
-| DDoS        | T1498     |
-| Bot         | T1071     |
-| WebAttack   | T1190     |
+* Attacker Goal Analysis
+* Impact Assessment
+* Security Recommendations
+* Executive Investigation Reports
 
 Endpoint:
 
@@ -192,9 +221,67 @@ POST /investigate
 
 ---
 
-### Security Operations Dashboard
+### SOC Analyst Assistant
 
-Built using:
+Capabilities:
+
+* AI Threat Analysis
+* MITRE ATT&CK Correlation
+* RAG-Augmented Context
+* Security Recommendations
+* Incident Response Guidance
+
+Endpoint:
+
+POST /analyze-threat
+
+---
+
+### Live Packet Monitoring
+
+Powered by:
+
+* Scapy
+
+Features:
+
+* Real-Time Packet Capture
+* Flow Tracking
+* Traffic Statistics
+* Live Detection Pipeline
+
+---
+
+### Live ML Detection
+
+Powered by:
+
+* Isolation Forest
+
+Features:
+
+* Real-Time Flow Analysis
+* Live Anomaly Detection
+* SOC Alert Generation
+* Continuous Monitoring
+
+---
+
+### Live SOC Alert Feed
+
+Capabilities:
+
+* Real-Time Alerts
+* PortScan Detection
+* ML Anomaly Alerts
+* Dashboard Visualization
+* Alert History
+
+---
+
+## Security Operations Dashboard
+
+Built Using:
 
 * React
 * TailwindCSS
@@ -203,13 +290,15 @@ Built using:
 
 Dashboard Features:
 
-* Threat Analysis
-* Threat History
+* Threat Detection
 * Threat Intelligence Lookup
 * Incident Reports
 * Threat Investigation
-* AI Security Copilot
-* MITRE Mapping Visualization
+* SHAP Explainability
+* Security Copilot
+* MITRE Mapping
+* Live SOC Feed
+* Live ML Alerts
 
 ---
 
@@ -223,7 +312,32 @@ Dashboard Features:
 | POST   | /copilot           | AI Security Copilot        |
 | POST   | /generate-report   | Incident Report Generation |
 | POST   | /rag-chat          | Cybersecurity RAG Chat     |
-| POST   | /investigate       | AI Threat Investigation    |
+| POST   | /investigate       | Threat Investigation       |
+| POST   | /analyze-threat    | SOC Analyst Assistant      |
+| GET    | /alerts            | Alert Feed                 |
+
+---
+
+## Docker Deployment
+
+### Start Entire Platform
+
+```bash
+docker compose up --build
+```
+
+### Services
+
+* FastAPI Backend
+* Ollama
+* Llama 3
+* RAG Knowledge Base
+
+### Verify
+
+```bash
+http://localhost:8000/docs
+```
 
 ---
 
@@ -250,10 +364,6 @@ Dashboard Features:
 * Axios
 * Vite
 
-### Threat Intelligence
-
-* AbuseIPDB
-
 ### AI
 
 * Ollama
@@ -262,58 +372,47 @@ Dashboard Features:
 * ChromaDB
 * HuggingFace Embeddings
 
-### Development
+### Threat Intelligence
 
+* AbuseIPDB
+
+### Monitoring
+
+* Scapy
+* Custom Flow Engine
+
+### DevOps
+
+* Docker
+* Docker Compose
 * Git
 * GitHub
-* VS Code
 
 ---
 
 ## Version History
 
-### v1.0
+### v1.8
 
-* AI Security Copilot
+* Live Traffic Monitoring
+* Flow Statistics Engine
 
-### v1.1
+### v1.9
 
-* Local Llama 3 Integration
+* Live ML Detection
+* SOC Alert Feed
 
-### v1.2
+### v2.0
 
-* AI Incident Report Generator
+* Dockerized Backend
+* Ollama Integration
+* Containerized AI Stack
 
-### v1.3
+### v2.1
 
-* Cybersecurity RAG Knowledge Base
-
-### v1.4
-
-* AI Threat Investigation Engine
-* MITRE ATT&CK Mapping
-* RAG-Powered Investigation
-* SOC Analyst Workflow
-
----
-
-## Roadmap
-
-### v1.5
-
-* SOC Analyst Assistant
-* Unified Threat Analysis Pipeline
-* Automated Threat Intelligence Correlation
-* Combined Investigation + Report Generation
-
-### Future
-
-* Malware Analysis Agent
-* Threat Hunting Module
-* SIEM Integration
-* Docker Deployment
-* Real-Time Packet Monitoring
-* Cloud Deployment
+* Docker Compose Deployment
+* Full Llama 3 Container Integration
+* Production-Ready Architecture
 
 ---
 
@@ -323,7 +422,7 @@ Shivam Singh
 
 B.Tech CSE (AI/ML)
 
-Cybersecurity • Artificial Intelligence • Machine Learning
+Artificial Intelligence • Machine Learning • Cybersecurity
 
 GitHub:
 https://github.com/shivaamsingh
