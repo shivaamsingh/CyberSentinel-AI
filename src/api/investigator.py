@@ -1,11 +1,13 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
-import ollama
+from ollama import Client
 from src.rag.rag_chat import ask_rag
 
 router = APIRouter()
 
-
+client = Client(
+    host="http://ollama:11434"
+)
 class InvestigationRequest(BaseModel):
     attack_type: str
     risk_level: str
@@ -117,7 +119,7 @@ Provide:
 Be concise and professional.
 """
 
-    response = ollama.chat(
+    response = client.chat(
         model="llama3",
         messages=[
             {

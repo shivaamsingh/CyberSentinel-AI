@@ -1,16 +1,22 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
-import ollama
+from ollama import Client
 
 router = APIRouter()
+
+client = Client(
+    host="http://ollama:11434"
+)
+
 
 class CopilotRequest(BaseModel):
     question: str
 
+
 @router.post("/copilot")
 def copilot(data: CopilotRequest):
 
-    response = ollama.chat(
+    response = client.chat(
         model="llama3",
         messages=[
             {

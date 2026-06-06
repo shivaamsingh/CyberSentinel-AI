@@ -1,9 +1,11 @@
 from fastapi import APIRouter
-import ollama
+from ollama import Client
 from pydantic import BaseModel
 
 router = APIRouter()
-
+client = Client(
+    host="http://ollama:11434"
+)
 
 class IncidentRequest(BaseModel):
     attack_type: str
@@ -70,7 +72,7 @@ Provide 4-6 actionable security recommendations.
 Short summary of the incident and recommended next steps.
 """
 
-    response = ollama.chat(
+    response = client.chat(
         model="llama3",
         messages=[
             {

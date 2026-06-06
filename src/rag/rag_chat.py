@@ -3,8 +3,12 @@ import os
 
 os.environ["OLLAMA_NO_GPU"] = "1"
 
-import ollama
+from ollama import Client
 
+
+client = Client(
+    host="http://ollama:11434"
+)
 
 def ask_rag(question: str):
 
@@ -24,7 +28,7 @@ Question:
 Answer:
 """
 
-    response = ollama.chat(
+    response = client.chat(
         model="llama3",
         messages=[
             {
